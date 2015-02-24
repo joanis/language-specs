@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Maxime Joanis 2014-05-09
+
+-->
+<language id="ebnf" _name="EBNF" version="2.0" _section="Modelling">
+  <metadata>
+    <property name="mimetypes">text/x-EBNF</property>
+    <property name="globs">*.ebnf</property>
+    <!-- <property name="line-comment-start">//</property> -->
+    <property name="block-comment-start">(*</property>
+    <property name="block-comment-end">*)</property>
+  </metadata>
+
+  <styles>
+    <style id="assignment-operator" _name="Assignment Operator" map-to="def:identifier"/> <!--operator-->
+    <style id="delimiter" _name="Delimiter" map-to="def:operator"/>
+    <style id="integer-number" _name="Integer number" map-to="def:base-n-integer"/>
+    <style id="floating-point" _name="Floating point number" map-to="def:floating-point"/>
+  </styles>
+
+  <definitions>
+
+	<!--        multiline comment (* ....*)        -->
+	<!-- <context id="comment-multiline2" style-ref="comment" class="comment" class-disabled="no-spell-check">
+	  <start>(?&lt;![^\s])\(\*(?![^\s])</start>
+	  <end>\*\)(?![^\s])</end>
+	  <include>
+		<context ref="def:in-comment"/>
+	  </include>
+	</context> -->
+
+    <context id="assignment-operator" style-ref="assignment-operator">
+      <match>[=]</match>
+    </context>
+
+    <context id="delimiters" style-ref="delimiter">
+      <match>[\{\}]+|[][]+</match> <!--[\)\(]+|-->
+    </context>
+
+    <context id="integer-number" style-ref="integer-number">
+      <match extended="true">
+        (?&lt;![\w\.])
+        ([1-9][0-9]*|0)[i]?
+        (?![\w\.])
+      </match>
+    </context>
+
+    <context id="floating-point" style-ref="floating-point">
+      <match extended="true">
+        (?&lt;![\w\.])
+        ([0-9]+[Ee][-+]?[0-9]+|
+         ([0-9]*\.[0-9]+|[0-9]+\.)([Ee][-+]?[0-9]+)?)
+        [i]?
+        (?![\w\.])
+      </match>
+    </context>
+
+    <context id="ebnf" class="no-spell-check">
+      <include>
+        <!-- <context ref="comment-multiline2"/> -->
+        <!-- <context ref="def:c-like-comment"/>
+        <context ref="def:c-like-comment-multiline"/>
+        <context ref="def:c-like-close-comment-outside-comment"/> -->
+        <!-- <context ref="def:shell-like-comment"/> -->
+        <context ref="def:string"/>
+        <context ref="def:single-quoted-string"/>
+        <context ref="assignment-operator"/>
+        <context ref="delimiters"/>
+        <context ref="integer-number"/>
+        <context ref="floating-point"/>
+      </include>
+    </context>
+
+  </definitions>
+
+</language>
